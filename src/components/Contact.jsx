@@ -1,6 +1,48 @@
 import React, { useState } from 'react';
 import { portfolioData } from '../portfolioData';
 
+// Helper to dynamically render CSS toast notifications in the DOM
+const showToast = (message, type = 'success') => {
+  let container = document.querySelector('.toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+
+  const iconSvg = type === 'success'
+    ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>`
+    : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+
+  toast.innerHTML = `
+    <div class="toast-icon">
+      ${iconSvg}
+    </div>
+    <div class="toast-message">${message}</div>
+  `;
+
+  container.appendChild(toast);
+
+  // Trigger transition entry
+  setTimeout(() => {
+    toast.classList.add('show');
+  }, 10);
+
+  // Auto remove after 4 seconds
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => {
+      toast.remove();
+      if (container.childNodes.length === 0) {
+        container.remove();
+      }
+    }, 400);
+  }, 4000);
+};
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
@@ -24,10 +66,9 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const accessKey = portfolioData.personal.web3formsKey;
-    if (!accessKey || accessKey.includes("YOUR_")) {
-      // Simulation fallback if key is not configured
-      alert("Note: Web3Forms Access Key is not configured in portfolioData.js yet! Simulating successful message submission.");
+    const apiKey = import.meta.env.VITE_CONTACT_HUB_KEY;
+    if (!apiKey) {
+      showToast("Contact Hub API Key (VITE_CONTACT_HUB_KEY) is not configured in your .env file yet!", "error");
       setSubmitted(true);
       setFormData({ name: '', email: '', message: '' });
       return;
@@ -36,31 +77,30 @@ export default function Contact() {
     setSubmitting(true);
 
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const response = await fetch('https://bytewise-dashboard.up.railway.app/api/v1/contact/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'X-API-Key': apiKey
         },
         body: JSON.stringify({
-          access_key: accessKey,
           name: formData.name,
           email: formData.email,
-          message: formData.message,
-          subject: `Portfolio Enquiry from ${formData.name}`
+          message: formData.message
         })
       });
       
       const result = await response.json();
-      if (result.success) {
+      if (response.ok && result.success) {
+        showToast("Message sent successfully!", "success");
         setSubmitted(true);
         setFormData({ name: '', email: '', message: '' });
       } else {
-        alert("Something went wrong. Please check your Web3Forms Access Key.");
+        showToast(result.error || "Something went wrong. Failed to send message.", "error");
       }
     } catch (error) {
       console.error("Submission error:", error);
-      alert("Failed to send message. Please check your internet connection.");
+      showToast("Failed to send message. Please check your internet connection.", "error");
     } finally {
       setSubmitting(false);
     }
