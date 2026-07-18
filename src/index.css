@@ -1,0 +1,269 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Color System */
+  --bg-primary: hsl(230, 25%, 5%);
+  --bg-secondary: hsl(230, 20%, 8%);
+  --card-bg: rgba(13, 17, 30, 0.6);
+  --card-border: rgba(255, 255, 255, 0.06);
+  --card-border-hover: rgba(129, 140, 248, 0.3);
+  --bg-input: rgba(255, 255, 255, 0.03);
+  --bg-input-focus: rgba(255, 255, 255, 0.05);
+  
+  --accent-primary: hsl(235, 90%, 72%);
+  --accent-secondary: hsl(270, 95%, 75%);
+  --accent-gradient: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  --accent-glow: rgba(129, 140, 248, 0.15);
+  
+  --text-primary: hsl(220, 15%, 96%);
+  --text-secondary: hsl(220, 10%, 70%);
+  --text-muted: hsl(220, 10%, 50%);
+  
+  /* Typography */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  
+  /* Transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body.light-mode {
+  --bg-primary: hsl(220, 30%, 96%);
+  --bg-secondary: hsl(220, 25%, 92%);
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(0, 0, 0, 0.08);
+  --card-border-hover: rgba(129, 140, 248, 0.4);
+  --bg-input: rgba(0, 0, 0, 0.03);
+  --bg-input-focus: rgba(0, 0, 0, 0.05);
+  
+  --accent-primary: hsl(235, 80%, 58%);
+  --accent-secondary: hsl(270, 80%, 60%);
+  --accent-gradient: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  --accent-glow: rgba(129, 140, 248, 0.08);
+  
+  --text-primary: hsl(220, 30%, 10%);
+  --text-secondary: hsl(220, 20%, 35%);
+  --text-muted: hsl(220, 15%, 55%);
+}
+
+/* Reset and Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+button, input, textarea {
+  font-family: inherit;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  border: 2px solid var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Layout Utilities */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section {
+  padding: 6rem 0;
+  position: relative;
+}
+
+/* Glassmorphism Card Style */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  transition: var(--transition-spring);
+}
+
+.glass-card:hover {
+  border-color: var(--card-border-hover);
+  box-shadow: 0 10px 30px -10px var(--accent-glow);
+  transform: translateY(-5px);
+}
+
+/* Gradient Text */
+.text-gradient {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Background Ambient Glows */
+.ambient-glow {
+  position: absolute;
+  width: 40vw;
+  height: 40vw;
+  border-radius: 50%;
+  filter: blur(150px);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-top-left {
+  top: -10%;
+  left: -10%;
+  background: var(--accent-primary);
+}
+
+.glow-bottom-right {
+  bottom: 10%;
+  right: -10%;
+  background: var(--accent-secondary);
+}
+
+/* Form Styling */
+.form-group {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 1rem;
+  background: var(--bg-input);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  outline: none;
+  font-size: 1rem;
+  transition: var(--transition-smooth);
+}
+
+.form-input:focus {
+  border-color: var(--accent-primary);
+  background: var(--bg-input-focus);
+  box-shadow: 0 0 10px rgba(129, 140, 248, 0.1);
+}
+
+.form-label {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  color: var(--text-secondary);
+  pointer-events: none;
+  transition: var(--transition-smooth);
+  transform-origin: left top;
+}
+
+.form-input:focus ~ .form-label,
+.form-input:not(:placeholder-shown) ~ .form-label,
+.form-label.floating {
+  transform: translateY(-2.2rem) scale(0.82);
+  color: var(--accent-primary);
+}
+
+/* Custom Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.8rem;
+  border-radius: 30px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  border: none;
+  font-size: 0.95rem;
+}
+
+.btn-primary {
+  background: var(--accent-gradient);
+  color: var(--bg-primary);
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(129, 140, 248, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(129, 140, 248, 0.5);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--card-border);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-secondary);
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.3; }
+}
+
+.pulse-glow {
+  animation: pulse-glow 6s ease-in-out infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+  .section {
+    padding: 4rem 0;
+  }
+}
